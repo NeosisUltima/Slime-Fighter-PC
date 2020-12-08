@@ -16,7 +16,7 @@ public class BattlePanel : MonoBehaviourPunCallbacks
 {
     public Image SlimeImage,SlimeHealthColor;
     public RectTransform Health;
-    public TextMeshProUGUI Name, MyCurrentHealthText;
+    public TextMeshProUGUI Name, MyCurrentHealthText, MyChoice;
     public List<SlimeSpriteList> ssl = new List<SlimeSpriteList>();
 
     public int myCurrentSlimeHealth = 100;
@@ -47,5 +47,10 @@ public class BattlePanel : MonoBehaviourPunCallbacks
         //SlimeHealthColor Update
         if (myCurrentSlimeHealth <= 67) SlimeHealthColor.color = Color.yellow;
         if (myCurrentSlimeHealth <= 33) SlimeHealthColor.color = Color.red;
+    }
+
+    public void myChoiceUpdate(string txt)
+    {
+        MyChoice.text = txt;
     }
 }

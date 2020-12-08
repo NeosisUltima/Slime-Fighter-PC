@@ -16,7 +16,7 @@ public class ItemInfo : MonoBehaviour
     private int num = 0;
     public int MaxItemInInventory =0;
     [SerializeField]
-    private int AtkBoost, DefBoost, SpdBoost;
+    private int AtkBoost, DefBoost, SpdBoost, ElemChange;
     private bool statsAdded = false;
     public Items thisItem;
 
@@ -26,21 +26,27 @@ public class ItemInfo : MonoBehaviour
     {
         pi = GameObject.Find("PlayerInfo").GetComponent<PlayerInfo>();
         useButton.interactable = false;
-
-        
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(thisItem.itemName != "" && !statsAdded)
+        if (thisItem.itemName != "" && !statsAdded)
         {
-            AtkBoost = thisItem.iteminfo["Attack"];
-            DefBoost = thisItem.iteminfo["Defense"];
-            SpdBoost = thisItem.iteminfo["Speed"];
+            if (this.thisItem.myItemType == Items.ItemType.Stat)
+            {
+                AtkBoost = thisItem.iteminfo["Attack"];
+                DefBoost = thisItem.iteminfo["Defense"];
+                SpdBoost = thisItem.iteminfo["Speed"];
+                
+            }
+            else
+            {
+                ElemChange = thisItem.iteminfo["Element"];
+            }
             statsAdded = true;
         }
+       
 
         if (num > 0) useButton.interactable = true;
         else useButton.interactable = false;
@@ -63,11 +69,17 @@ public class ItemInfo : MonoBehaviour
 
     public void UseItem()
     {
-        Debug.Log(AtkBoost + ", " + DefBoost + ", " + SpdBoost);
-        pi.mySlime.setAtk(pi.mySlime.getAtk() + (AtkBoost * num));
-        pi.mySlime.setDef(pi.mySlime.getDef() + (DefBoost * num));
-        pi.mySlime.setSpd(pi.mySlime.getSpd() + (SpdBoost * num));
-
+        if (thisItem.myItemType == Items.ItemType.Stat)
+        {
+            Debug.Log(AtkBoost + ", " + DefBoost + ", " + SpdBoost);
+            pi.mySlime.setAtk(pi.mySlime.getAtk() + (AtkBoost * num));
+            pi.mySlime.setDef(pi.mySlime.getDef() + (DefBoost * num));
+            pi.mySlime.setSpd(pi.mySlime.getSpd() + (SpdBoost * num));
+        }
+        else
+        {
+            if (!pi.SlimeEggTapped) pi.presetElem = ElemChange;
+        }
         pi.myInventory.Remove(thisItem, num);
 
         num = 0;

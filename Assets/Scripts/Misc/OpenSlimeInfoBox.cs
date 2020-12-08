@@ -23,7 +23,7 @@ public class OpenSlimeInfoBox : MonoBehaviour
 
     public void UpdateText()
     {
-        myinfoText.text = "Slime Name: " + pi.mySlime.getNme() + "\nSlime Type: " + pi.mySlime.getElement().MySlimeElement + "\nWeak to: " + pi.mySlime.getElement().MyWeakElement + "\nStrong to: " + pi.mySlime.getElement().MyStrongElement;
+        myinfoText.text = "Slime Name: " + pi.mySlime.getNme() + "\nOwner: " + pi.pName + "\nSlime Type: " + pi.mySlime.getElement().MySlimeElement + "\nWeak to: " + pi.mySlime.getElement().MyWeakElement + "\nStrong to: " + pi.mySlime.getElement().MyStrongElement;
     }
 
     public void OpenBox()

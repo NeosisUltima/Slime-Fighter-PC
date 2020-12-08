@@ -20,6 +20,7 @@ public class PlayerInfo : MonoBehaviourPunCallbacks
     public MyQuestSaver mqs;
     public Inventory myInventory = new Inventory();
     private float timer = 5.0f;
+    public int presetElem = -1;
 
     //QuestSaver for PlayerInfo
     public int QuestTimer = 0;
@@ -41,7 +42,7 @@ public class PlayerInfo : MonoBehaviourPunCallbacks
             SlimeHatched = false;
         }
 
-        if (mySlime.SlimeWins == 15) mySlime.Evolve();
+        if (mySlime.SlimeWins == mySlime.EVOLUTION_THRESHOLD) mySlime.Evolve();
 
         if(LoggedInFirstTime) timer -= Time.deltaTime;
         if (timer < 0f) { SaveSystem.SavePlayer(this,mqs); timer = 5.0f; Debug.Log("saving"); }

@@ -10,7 +10,7 @@ using UnityEngine;
 public class Slime
 {
     //ATTACK,DEFENSE,SPEED
-    private static int MAX_STAT = 99;
+    private static int MAX_STAT = 250;
     private static int MAX_HEALTH = 100;
 
     private int health;
@@ -72,13 +72,13 @@ public class Slime
         EVOLUTION_THRESHOLD = 15;
     }
 
-    public Slime(Slime olderSlime, string name)
+    public Slime(Slime olderSlime, string name, int elemSet)
     {
         nAme = name;
-        if (olderSlime.getAtk()/5 > 5) atk = olderSlime.getAtk() / 5; else setAtk(5);
-        if (olderSlime.getDef()/5 > 5) def = olderSlime.getDef() / 5; else setDef(5);
-        if (olderSlime.getSpd()/5 > 5) spd = olderSlime.getSpd() / 5; else setSpd(5);
-        int rand = Mathf.FloorToInt(UnityEngine.Random.Range(0.0f, 10000)) % 6;
+        if (olderSlime.getAtk()/5 > 5) atk = UnityEngine.Random.Range(5,(olderSlime.getAtk() / 5)); else setAtk(5);
+        if (olderSlime.getDef()/5 > 5) def = UnityEngine.Random.Range(5,(olderSlime.getDef() / 5)); else setDef(5);
+        if (olderSlime.getSpd()/5 > 5) spd = UnityEngine.Random.Range(5,(olderSlime.getSpd() / 5)); else setSpd(5);
+        int rand = (elemSet == -1) ? Mathf.FloorToInt(UnityEngine.Random.Range(0.0f, 10000)) % 6 : elemSet ;
         elem = new Element(rand);
         evolutionstage = 1;
         health = MAX_HEALTH;
@@ -88,10 +88,14 @@ public class Slime
         EVOLUTION_THRESHOLD = 15;
     }
 
-    public Slime(string nme)
+    public Slime(string nme,int elemSet)
     {
         nAme = nme;
-        initiate();
+        int rand = (elemSet == -1) ? Mathf.FloorToInt(UnityEngine.Random.Range(0.0f, 10000)) % 6 : elemSet;
+        setAtk(5);
+        setDef(5);
+        setSpd(5);
+        setElement(rand);
         evolutionstage = 1;
         health = MAX_HEALTH;
         NameLength = nAme.Length;
@@ -128,25 +132,30 @@ public class Slime
 
     public void setSlimeEvolutionStage(int evol) { evolutionstage = evol; }
 
-    private void initiate()
-    {
-        int rand = Mathf.FloorToInt(UnityEngine.Random.Range(0.0f, 10000)) % 6;
-        setAtk(5);
-        setDef(5);
-        setSpd(5);
-        setElement(rand);
-    }
-
     //EVOLUTION AND REINCARNATION
     public void Evolve()
     {
         if (SlimeWins == EVOLUTION_THRESHOLD)
         {
-            evolutionstage++;
-            setAtk((int)Math.Round(getAtk() * 1.5));
-            setDef((int)Math.Round(getDef() * 1.5));
-            setSpd((int)Math.Round(getSpd() * 1.5));
-            EVOLUTION_THRESHOLD += 15;
+            if (evolutionstage < 2)
+            {
+                evolutionstage++;
+                setAtk((int)Math.Round(getAtk() * 1.5));
+                setDef((int)Math.Round(getDef() * 1.5));
+                setSpd((int)Math.Round(getSpd() * 1.5));
+                EVOLUTION_THRESHOLD += 15;
+            }
+            else
+            {
+                int tempevol = UnityEngine.Random.Range(3, 5);
+                while (tempevol == evolutionstage) tempevol = UnityEngine.Random.Range(3, 5);
+                evolutionstage = tempevol ;
+
+                setAtk((int)Math.Round(getAtk() * 1.5));
+                setDef((int)Math.Round(getDef() * 1.5));
+                setSpd((int)Math.Round(getSpd() * 1.5));
+                EVOLUTION_THRESHOLD += 15;
+            }
         }
     }
 }
